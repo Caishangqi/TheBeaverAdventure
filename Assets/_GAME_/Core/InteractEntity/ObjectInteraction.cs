@@ -68,12 +68,18 @@ public class ObjectInteraction : MonoBehaviour
             boxRigidbody.isKinematic = true; // 使箱子刚体不可移动
             //boxRigidbody.simulated = false;  // 取消模拟物理行为
         }
+        // 打开 BoxCollider2D 的 isTrigger
+        BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
+        if (boxCollider != null)
+        {
+            boxCollider.isTrigger = true;
+        }
         
         transform.SetParent(player.transform); // 将物体绑定到玩家
         transform.localPosition = new Vector2(0,0.5f); // 物体附加到玩家身上(可以根据需要调整位置)
         
         
-        boxRigidbody.isKinematic = false; // 使箱子刚体不可移动
+        //boxRigidbody.isKinematic = false; // 使箱子刚体不可移动
     }
 
     void DetachObject()
@@ -86,6 +92,12 @@ public class ObjectInteraction : MonoBehaviour
         {
             boxRigidbody.isKinematic = false; // 恢复箱子的物理行为
             //boxRigidbody.simulated = true;    // 重新模拟物理行为
+        }
+        
+        BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
+        if (boxCollider != null)
+        {
+            boxCollider.isTrigger = false;
         }
         
         transform.SetParent(originalParent); // 恢复物体的原始父对象
