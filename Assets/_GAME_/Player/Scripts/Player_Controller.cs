@@ -42,6 +42,7 @@ public class Player_Controller : MonoBehaviour
 
     private Vector2 _mouseClickPosition = Vector2.zero;
     private bool _isMoving = false;
+    private bool _isCollied = false;
 
     #endregion
 
@@ -50,6 +51,18 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        //TODO: 在点击箱子的时候, Detach 不要移动玩家
+        // 将鼠标屏幕坐标转换为世界坐标
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+
+        if (hit.collider != null && hit.collider.gameObject != gameObject) // 检查点击是否在当前物体上
+        {
+            if (gameObject.CompareTag("PuzzleCube"))
+            {
+            }
+        }
+
         GetMousePosition();
         GatherMoveDirection();
         CalculateFacingDirection();
@@ -128,7 +141,15 @@ public class Player_Controller : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            _isMoving = false;
+            _isCollied = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            _isCollied = false;
         }
     }
 
@@ -164,17 +185,18 @@ public class Player_Controller : MonoBehaviour
             _spriteRenderer.flipX = false;
         }
 
-        if (_isMoving) // 意味着正在移动
+
+        if (_isMoving && !_isCollied) // 意味着正在移动
         {
             _animator.CrossFade(_animMoveRight, 0);
         }
 
-        if (!_isMoving)
+        if (!_isMoving || _isCollied)
         {
             _animator.CrossFade(_animIdleRight, 0);
         }
 
-        Debug.Log(_deltaDisplacement);
+        //Debug.Log(_deltaDisplacement);
     }
 
     #endregion

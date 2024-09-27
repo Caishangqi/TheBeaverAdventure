@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - PuzzleCube
   layers:
   - Default
   - TransparentFX
@@ -51,8 +52,14 @@ TagManager:
   - name: Vegetation
     uniqueID: 683656197
     locked: 0
-  - name: PuzzleObject
+  - name: InteractTile
     uniqueID: 1047561071
+    locked: 0
+  - name: InteractObject
+    uniqueID: 1101023059
+    locked: 0
+  - name: Building
+    uniqueID: 1656155227
     locked: 0
   - name: Character
     uniqueID: 797568657
