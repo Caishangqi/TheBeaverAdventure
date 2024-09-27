@@ -10,9 +10,10 @@ public class ObjectInteraction : MonoBehaviour
     private bool isAttached = false; // 物体是否已绑定
     private float lastClickTime = 0f; // 上次点击的时间
     private Transform originalParent; // 原始父对象
-
+    public FixedJoint2D fixedJoint; // 用于连接物体和角色的关节
     void Start()
     {
+        //Vector2 vector2 = gameObject.GetComponent<BoxCollider2D>().size;
         originalParent = transform.parent; // 记录物体的初始父对象
     }
 
@@ -59,16 +60,37 @@ public class ObjectInteraction : MonoBehaviour
     void AttachObject()
     {
         isAttached = true;
+        
+        // 取消箱子的物理模拟，使其与角色刚体合并
+        Rigidbody2D boxRigidbody = GetComponent<Rigidbody2D>();
+        if (boxRigidbody != null)
+        {
+            boxRigidbody.isKinematic = true; // 使箱子刚体不可移动
+            //boxRigidbody.simulated = false;  // 取消模拟物理行为
+        }
+        
         transform.SetParent(player.transform); // 将物体绑定到玩家
-        transform.localPosition = Vector3.zero; // 物体附加到玩家身上(可以根据需要调整位置)
+        transform.localPosition = new Vector2(0,0.5f); // 物体附加到玩家身上(可以根据需要调整位置)
+        
+        
+        boxRigidbody.isKinematic = false; // 使箱子刚体不可移动
     }
 
     void DetachObject()
     {
         isAttached = false;
+        
+        // 恢复物体的物理模拟
+        Rigidbody2D boxRigidbody = GetComponent<Rigidbody2D>();
+        if (boxRigidbody != null)
+        {
+            boxRigidbody.isKinematic = false; // 恢复箱子的物理行为
+            //boxRigidbody.simulated = true;    // 重新模拟物理行为
+        }
+        
         transform.SetParent(originalParent); // 恢复物体的原始父对象
         // 你可以根据需求在此设置物体的位置，例如保持其当前的位置：
-        // transform.position = transform.position;
+ 
     }
 
 
